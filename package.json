@@ -1,0 +1,122 @@
+{
+  "name": "roblox-bytecode-dissassembler",
+  "displayName": "Roblox-Bytecode-Dissassembler",
+  "description": "A extension I made for myself to have a bytecode dissassembler for luau because I want to learn it.",
+  "version": "0.0.6",
+  "publisher": "mastershadow547",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onWebviewPanel:luauBytecodeView"
+  ],
+  "main": "./dist/extension.js",
+  "files": [
+    "dist/**",
+    "tools/medal/medal.exe",
+    "package.json"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "roblox-bytecode-dissassembler.show",
+        "title": "Luau: Show Bytecode Panel"
+      },
+      {
+        "command": "roblox-bytecode-dissassembler.reload",
+        "title": "Luau: Reload Bytecode Panel (fix blank/broken panel)"
+      }
+    ],
+    "configuration": {
+      "title": "Luau Bytecode Disassembler",
+      "properties": {
+        "luauBytecode.compilerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to luau-compile(.exe). Overrides auto-detection."
+        },
+        "luauBytecode.searchDirectories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Extra folders to search for luau-compile, checked before C:/Luau and H:/Luau."
+        },
+        "luauBytecode.optimizationLevel": {
+          "type": "number",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Optimization level passed to luau-compile (-O)."
+        },
+        "luauBytecode.debugLevel": {
+          "type": "number",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Debug level passed to luau-compile (-g)."
+        },
+        "luauBytecode.dumpConstants": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include each function's constant table in the disassembly."
+        },
+        "luauBytecode.autoShow": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-open/update the panel on active .lua/.luau files. If false, use the 'Luau: Show Bytecode Panel' command."
+        },
+        "luauBytecode.debounceMs": {
+          "type": "number",
+          "default": 350,
+          "minimum": 0,
+          "description": "Milliseconds to wait after you stop typing before recompiling."
+        },
+        "luauBytecode.expandOneLiners": {
+          "type": "boolean",
+          "default": false,
+          "description": "Best-effort expansion of minified/one-line Luau source into multiple lines before compiling, so each bytecode instruction's source-line context is readable. Doesn't modify your actual file."
+        },
+        "luauBytecode.largeOutputThreshold": {
+          "type": "number",
+          "default": 4000,
+          "minimum": 100,
+          "description": "Above this many lines of disassembly output, syntax highlighting falls back to a cheaper mode to avoid freezing on very large scripts."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.125.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "typescript-eslint": "^8.61.1",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3",
+    "ts-loader": "^9.6.2",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.6"
+  }
+}
